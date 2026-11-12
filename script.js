@@ -89,7 +89,7 @@ const sizesHtml = (p) => p.sizes.length === 1
   : `<div class="sizes">${p.sizes.map((s, i) => `<button type="button" class="size${i === picked[p.id] ? " on" : ""}" data-size="${i}">${s.label}</button>`).join("")}</div>`;
 /* mais vendidos: 7 masculinos e 7 femininos, nesta ordem (carrossel) */
 const BEST = {
-  masculino: ["club-de-nuit-intense-man", "asad-elixir", "fakhar-black", "hawas", "acqua-di-gio", "bleu-de-chanel", "y"],
+  masculino: ["asad-elixir", "fakhar-black", "hawas", "acqua-di-gio", "bleu-de-chanel", "y", "club-de-nuit-intense-man"],
   feminino: ["khamrah", "yara-elixir", "sabah-al-ward", "club-de-nuit-woman", "la-vie-est-belle", "good-girl", "libre"],
 };
 const SECTIONS = {
@@ -98,7 +98,7 @@ const SECTIONS = {
   feminino: (p) => p.gender === "feminino",
 };
 const EMPTY = { catalogo: "Novos perfumes chegando em breve.", masculino: "Novos perfumes masculinos chegando em breve.", feminino: "Perfumes femininos chegando em breve." };
-const FIRST = 4; // cada seção abre com 4
+const FIRST = 8; // cada seção abre com 8
 const stepFor = (cat) => (cat === "all" ? 8 : 6); // "Ver mais": 8 por vez em Todos, 6 nos filtros Árabe/Importado
 function renderGrid(sec, cat, shown = FIRST) {
   sec.dataset.cat = cat;
@@ -218,7 +218,7 @@ const FEATURED = "club-de-nuit-intense-man";
   const col = (title, arr) => `<div><h4>${title}</h4><ul>${arr.map((n) => `<li>${noteIcon(n)}${n}</li>`).join("")}</ul></div>`;
   $("feature").innerHTML = `
   <article class="card feat" data-id="${p.id}">
-    <img class="feat-img" src="img/perfumes/produto-destaque.jpg" alt="${p.name}" loading="lazy">
+    <div class="feat-media"><img class="feat-img" src="img/perfumes/banner-destaque-1.jpg" alt="${p.name}" loading="lazy"></div>
     <div class="feat-body">
       <span class="badge">${famIcon(p.fam)}${p.fam}</span>
       <span class="brand">${p.brand}</span>
@@ -389,7 +389,7 @@ renderList();
   const vp = root.querySelector(".t-viewport");
   const originals = [...vp.children];
   originals.forEach((c) => { const k = c.cloneNode(true); k.setAttribute("aria-hidden", "true"); vp.appendChild(k); });
-  if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  /* corre mesmo com "Reduzir movimento" (iPhone): é só uma faixa lenta na horizontal */
   const SPEED = 36; // px por segundo
   let pos = 0, last = 0, paused = false, timer;
   const loopW = () => originals.length * (originals[0].offsetWidth + (parseFloat(getComputedStyle(vp).columnGap) || 0));
@@ -611,7 +611,7 @@ const REELS = [
 /* ---------- entrada em sequência das seções ---------- */
 (function () {
   if (matchMedia("(prefers-reduced-motion:reduce)").matches || !("IntersectionObserver" in window)) return;
-  const sel = [".brands", ".cat-head", "#catalogo .car", "#catalogo .feature", ".testimonials .section-head", ".t-carousel", ".reels .section-head", ".steps .section-head", ".steps li", ".faq .section-head", ".faq details", ".order .oc", ".ft-brand", ".ft-sections>div", ".ft-bottom"];
+  const sel = [".brands", ".cat-head", ".promo-media", "#catalogo .car", "#catalogo .feature", ".testimonials .section-head", ".t-carousel", ".reels .section-head", ".steps .section-head", ".steps li", ".faq .section-head", ".faq details", ".order .oc", ".ft-brand", ".ft-sections>div", ".ft-bottom"];
   const els = [...document.querySelectorAll(sel.join(","))];
   els.forEach((el) => {
     el.classList.add("rv");
@@ -702,4 +702,35 @@ const REELS = [
     const b = e.target.closest && e.target.closest(".btn");
     if (b) b.classList.remove("fill");
   });
+})();
+
+
+/* ---------- hero (mobile): cards em carrossel, com pontinhos e avanço automático ---------- */
+(function () {
+  const rail = document.querySelector(".pillars");
+  if (!rail) return;
+  const cards = [...rail.children], n = cards.length;
+  const mq = matchMedia("(max-width:719px)");
+  const dots = document.createElement("div");
+  dots.className = "pillars-dots";
+  dots.setAttribute("role", "group");
+  dots.setAttribute("aria-label", "Diferenciais");
+  dots.innerHTML = cards.map((_, i) => `<button type="button" aria-label="Card ${i + 1} de ${n}"></button>`).join("");
+  rail.after(dots);
+  const btns = [...dots.children];
+  const stepW = () => cards[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(rail).columnGap) || 0);
+  const cur = () => Math.max(0, Math.min(n - 1, Math.round(rail.scrollLeft / (stepW() || 1))));
+  const mark = () => { const c = cur(); btns.forEach((b, i) => b.setAttribute("aria-current", i === c)); };
+  const go = (i) => rail.scrollTo({ left: i * stepW(), behavior: "smooth" });
+  rail.addEventListener("scroll", mark, { passive: true });
+  btns.forEach((b, i) => b.addEventListener("click", () => { go(i); hold(6000); }));
+  let until = 0;
+  const hold = (ms) => { until = Date.now() + ms; };
+  rail.addEventListener("touchstart", () => hold(6000), { passive: true });
+  rail.addEventListener("pointerdown", () => hold(6000));
+  setInterval(() => {
+    if (!mq.matches || document.hidden || Date.now() < until || scrollY > innerHeight * 0.6) return;
+    go((cur() + 1) % n);
+  }, 4000);
+  mark();
 })();

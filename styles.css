@@ -1,7 +1,7 @@
 :root{
   --black:#000; --bg:#0B0B0C; --bg2:#1A1A1D; --card:#1A1A1D; --line:#2E2E33;
   --silver:#C0C0C5; --cream:#F2F2F2; --mute:#9A9AA0;
-  --purple:#5B2A86; --purple-l:#8E5BC2; --wa:#25D366;
+  --purple:#C0C0C5; --purple-l:#C0C0C5; --wa:#25D366;
   --serif:'Cormorant Garamond',Georgia,serif; --sans:'Jost',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -77,7 +77,7 @@ footer{background:var(--black)}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.55) 0%,rgba(11,11,12,.5) 50%,rgba(11,11,12,.85) 100%);pointer-events:none}
 .hero-title{position:relative;z-index:2;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:baseline;gap:.35em;white-space:nowrap;width:100%;padding:0 1rem;text-align:center;font-size:clamp(1.9rem,8vw,6.5rem);letter-spacing:.14em;line-height:1;text-shadow:0 2px 24px rgba(0,0,0,.7);pointer-events:none}
 .hero-title span,.hero-title em{display:block;margin-right:-.14em}
-#titleR{color:var(--silver)}
+#titleR{color:#fff}
 .hero-copy{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.4rem}
 .hero-text{max-width:30rem;padding:0 1.25rem;text-align:center}
 .hero-text .hero-cta{justify-content:center}
@@ -171,11 +171,11 @@ footer a{color:var(--silver)}
 /* carrossel de marcas */
 main>section.brands{background:#fff;padding:0!important;overflow:hidden;border-bottom:1px solid #ddd}
 .brands-track{display:flex;width:max-content;animation:brands 40s linear infinite}
-.brands:hover .brands-track{animation-play-state:paused}
+@media(hover:hover){.brands:hover .brands-track{animation-play-state:paused}}
 .brands-set{display:flex;align-items:center;gap:clamp(2rem,5vw,4.5rem);padding:1.1rem clamp(1rem,2.5vw,2.25rem)}
 .brands-set img{height:44px;width:auto;flex:none;mix-blend-mode:multiply}
 @keyframes brands{to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.brands-track{animation:none}.brands{overflow-x:auto}}
+/* faixa de marcas: segue rolando mesmo com "Reduzir movimento" (movimento lento, só horizontal) */
 
 /* produto em destaque */
 .feature{margin-top:2.5rem}
@@ -303,7 +303,7 @@ main>section#feminino{padding-bottom:3.5rem}
 .faq details[open] .fq-i::before,.faq details[open] .fq-i::after{background:#111}
 .faq details[open] .fq-i::after{transform:translate(-50%,-50%) rotate(0)}
 .faq details p{padding:0 1.2rem 1.15rem;color:var(--mute);font-size:.92rem;line-height:1.7}
-.faq summary:focus-visible{outline:2px solid var(--purple-l);outline-offset:2px;border-radius:14px}
+.faq summary:focus-visible{outline:2px solid var(--silver);outline-offset:2px;border-radius:14px}
 @media(min-width:900px){
   .faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:3rem;align-items:start}
   .faq .section-head{text-align:left;margin-bottom:0;position:sticky;top:90px}
@@ -365,10 +365,10 @@ main>section.testimonials{background:#fff;color:#111}
 .gc-stage[data-dragging]{cursor:grabbing}
 .gc-card{position:absolute;width:var(--gc-w,240px);margin:0;padding:6px;display:block;border:1px solid var(--line);border-radius:14px;background:#161618;box-shadow:inset 0 1px rgba(255,255,255,.08),0 18px 32px rgba(0,0,0,.5);backface-visibility:hidden;transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .5s ease;will-change:transform;cursor:pointer;text-align:center;color:inherit}
 .gc-stage[data-dragging] .gc-card{transition:none}
-.gc-card:focus-visible{outline:2px solid var(--purple-l);outline-offset:6px}
+.gc-card:focus-visible{outline:2px solid var(--silver);outline-offset:6px}
 .gc-poster{display:block;position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;border-radius:9px;background:#1a1a1d}
 .gc-poster>img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-.gc-ph{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#2a1840,#141416 70%)}
+.gc-ph{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#2a2a2e,#141416 70%)}
 .gc-ph svg{width:44px;height:44px;fill:rgba(255,255,255,.55);stroke:none}
 .gc-shade{position:absolute;inset:0;background:#000;opacity:var(--gc-shade,0);transition:opacity .4s;pointer-events:none}
 .gc-watch{position:absolute;bottom:14px;left:50%;transform:translate(-50%);display:flex;align-items:center;gap:7px;white-space:nowrap;padding:9px 15px;border-radius:24px;background:rgba(26,26,29,.9);border:1px solid var(--line);font-size:.75rem;font-weight:500;color:#fff;opacity:0;transition:opacity .2s,background .2s,color .2s}
@@ -577,3 +577,69 @@ main>section:not(.hero){position:relative;z-index:1}
 /* todos os botões: preenchimento do hover em prata suave */
 .btn::before{background:radial-gradient(circle at 50% 50%,#eeeef2 0%,#d9d9df 55%,#c6c6ce 100%)}
 .oc-btn:hover{background:radial-gradient(circle at 50% 50%,#f4f4f7 0%,#dedee4 60%,#cdcdd4 100%)}
+
+/* produto em destaque: zoom leve na foto ao passar o mouse */
+.card.feat{overflow:hidden}
+.feat-img{transition:scale .6s cubic-bezier(.22,1,.36,1)}
+@media(hover:hover){.feat-media:hover .feat-img{scale:1.05}}
+@media(prefers-reduced-motion:reduce){.feat-img{transition:none}.feat-media:hover .feat-img{scale:1}}
+
+/* banner abaixo do Feminino */
+main>section.promo{background:#fff;padding-block:0 var(--section-y);padding-inline:max(1.25rem,calc((100% - 1180px)/2))!important}
+main>section.catalog+section.promo{padding-top:0}
+main>section.promo+section.testimonials{padding-top:0}
+.promo-img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 2px 14px rgba(0,0,0,.1)}
+
+/* zoom contido na própria área da foto (só ao passar o mouse na imagem) */
+.feat-media{overflow:hidden;line-height:0;width:100%}
+.feat-media .feat-img{width:100%;max-height:370px}
+@media(min-width:720px){.feat-media{width:52%;align-self:center;max-height:370px}}
+
+/* banner 2: moldura própria, zoom leve só ao passar o mouse na imagem */
+.promo-media{overflow:hidden;line-height:0;border-radius:6px;box-shadow:0 2px 14px rgba(0,0,0,.1)}
+.promo-img{border-radius:0;box-shadow:none;transition:scale .6s cubic-bezier(.22,1,.36,1)}
+@media(hover:hover){.promo-media:hover .promo-img{scale:1.05}}
+@media(prefers-reduced-motion:reduce){.promo-img{transition:none}.promo-media:hover .promo-img{scale:1}}
+
+/* destaque: a foto preenche toda a altura do card (sem faixa branca em cima/embaixo) */
+@media(min-width:720px){
+  .feat-media{align-self:stretch;max-height:none;position:relative}
+  .feat-media .feat-img{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover}
+}
+
+/* mobile: título do hero em duas linhas, fonte maior */
+@media(max-width:599px){.hero-title{flex-direction:column;align-items:center;gap:.12em;font-size:16vw;padding:0 .75rem}.hero-title span,.hero-title em{margin-right:-.14em}}
+
+/* "100%" nos cards do hero: números alinhados na altura das letras (a fonte serifada usa números pequenos por padrão) */
+.pillars h3{font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1}
+/* mobile: os 3 cards do hero viram carrossel (desliza e avança sozinho) */
+.pillars-dots{display:none}
+@media(max-width:719px){
+  .pillars{display:flex;gap:.6rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;width:calc(100% - 2.5rem);bottom:2.3rem;border-radius:10px}
+  .pillars::-webkit-scrollbar{display:none}
+  .pillars>div{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+  .pillars-dots{display:flex;position:absolute;z-index:2;left:0;right:0;bottom:1.1rem;justify-content:center;gap:8px;opacity:calc(1 - var(--hp,0)*1.8)}
+  .pillars-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:background .25s,width .25s}
+  .pillars-dots button[aria-current="true"]{background:#fff;width:22px;border-radius:8px}
+}
+/* celulares de tela baixa (ex.: iPhone SE): o conteúdo centraliza só no espaço acima do carrossel */
+@media(max-width:599px) and (max-height:740px){
+  .hero-title{font-size:13vw}
+  .hero-copy{padding:4.5rem 0 7.5rem}
+}
+
+/* setas do carrossel: botão preto com anel prata, no estilo do site */
+.car-arrow{width:46px;height:46px;top:calc(50% - 23px);border:1px solid rgba(192,192,197,.7);background:linear-gradient(180deg,#26262a,#0b0b0c);opacity:1;box-shadow:inset 0 1px rgba(255,255,255,.14),0 8px 20px rgba(0,0,0,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .25s,border-color .25s,box-shadow .25s,transform .25s,opacity .25s}
+.car-arrow svg{width:20px;height:20px;stroke:#fff;stroke-width:1.8;transition:stroke .25s,transform .25s}
+.car-arrow:active{transform:scale(.94)}
+.car-arrow:disabled{opacity:0;pointer-events:none}
+@media(hover:hover){
+  .car-arrow:hover{opacity:1;background:radial-gradient(circle at 50% 35%,#fff,#d9d9de 70%);border-color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.38),0 0 0 4px rgba(192,192,197,.22)}
+  .car-arrow:hover svg{stroke:#0b0b0c}
+  .car-arrow.prev:hover svg{transform:translateX(-2px)}
+  .car-arrow.next:hover svg{transform:translateX(2px)}
+}
+.car-arrow:focus-visible{outline:2px solid var(--silver);outline-offset:3px;opacity:1}
+@media(max-width:719px){.car-arrow{width:40px;height:40px;top:calc(50% - 20px)}.car-arrow svg{width:18px;height:18px}}
+.car-arrow.prev{left:-.6rem}.car-arrow.next{right:-.6rem}
+@media(min-width:1280px){.car-arrow.prev{left:-1.3rem}.car-arrow.next{right:-1.3rem}}
